@@ -21,6 +21,7 @@ def get_checkers_config() -> tuple:
         thinking_enabled=True,  # Enable <think> tags for reasoning
         temperature=0.7,  # LLM sampling temperature
         ai_plays_as=Player.RED,  # AI plays as red pieces
+        format_gated_rewards=False,  # Set to True to only reward strategy if format is correct
         # Base environment configuration
         num_items=1000,  # Number of training episodes
         concurrent_limit=10,  # Concurrent episodes
@@ -61,6 +62,7 @@ if __name__ == "__main__":
     print(f"  Max episode turns: {env_config.max_episode_turns}")
     print(f"  Evaluation episodes: {env_config.eval_episodes}")
     print(f"  Temperature: {env_config.temperature}")
+    print(f"  Format gated rewards: {env_config.format_gated_rewards}")
 
     print("\nServer Configuration:")
     for i, config in enumerate(server_configs):

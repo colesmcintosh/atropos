@@ -321,6 +321,9 @@ class CheckersEnvConfig(BaseEnvConfig):
     thinking_enabled: bool = True
     temperature: float = 0.7
     ai_plays_as: Player = Player.RED  # Which color the AI plays
+    format_gated_rewards: bool = (
+        False  # Only give accuracy rewards if format is correct
+    )
 
 
 class CheckersEnv(BaseEnv):
@@ -441,6 +444,7 @@ class CheckersEnv(BaseEnv):
             opponent_type=OpponentType.RANDOM,
             thinking_enabled=True,
             ai_plays_as=Player.RED,
+            format_gated_rewards=False,  # Default to current behavior
         )
         server_configs = [
             APIServerConfig(
@@ -619,7 +623,9 @@ class CheckersEnv(BaseEnv):
                     # Apply move
                     if board.apply_move(move):
                         valid_moves += 1
-                        game_reward += 0.1  # Small reward for valid moves
+                        # Only give format reward if format_gated_rewards is False
+                        if not self.config.format_gated_rewards:
+                            game_reward += 0.1  # Small reward for valid moves
                     else:
                         invalid_moves += 1
                         game_reward -= 0.5  # Penalty for invalid moves
@@ -649,7 +655,15 @@ class CheckersEnv(BaseEnv):
             for message in messages:
                 if message["role"] == "assistant" and "<think>" in message["content"]:
                     thinking_bonus += 0.1
-            game_reward += min(thinking_bonus, 0.5)  # Cap thinking bonus
+
+            # Apply thinking bonus based on format_gated_rewards setting
+            if self.config.format_gated_rewards:
+                # Only give thinking bonus if no invalid moves occurred
+                if invalid_moves == 0:
+                    game_reward += min(thinking_bonus, 0.5)  # Cap thinking bonus
+            else:
+                # Always give thinking bonus regardless of move validity
+                game_reward += min(thinking_bonus, 0.5)  # Cap thinking bonus
 
         # Track metrics
         self.episode_outcomes_buffer.append(game_reward)

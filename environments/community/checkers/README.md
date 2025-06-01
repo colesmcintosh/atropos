@@ -60,6 +60,7 @@ config = CheckersEnvConfig(
     thinking_enabled=True,
     temperature=0.7,
     eval_episodes=50,
+    format_gated_rewards=False,           # Set to True for format-gated rewards
 
     # Standard BaseEnvConfig options
     group_size=16,
@@ -122,6 +123,7 @@ Where:
 
 ### Reward Structure
 
+**Default Behavior (`format_gated_rewards=False`):**
 - **Valid moves**: +0.1 per move
 - **Invalid moves**: -0.5 penalty
 - **Game outcomes**:
@@ -130,6 +132,15 @@ Where:
   - Loss: -1.0
 - **Incomplete games**: -0.5 penalty
 - **Thinking bonus**: +0.1 per response with `<think>` tags (capped at +0.5)
+
+**Format-Gated Rewards (`format_gated_rewards=True`):**
+- **Valid moves**: 0.0 (format is just a requirement)
+- **Invalid moves**: -0.5 penalty
+- **Game outcomes**: Same as above
+- **Incomplete games**: -0.5 penalty
+- **Thinking bonus**: Only given if no invalid moves occurred (+0.1 per `<think>` tag, capped at +0.5)
+
+The format-gated approach prevents the model from gaming small format rewards and focuses training entirely on strategic play.
 
 ### Opponent Types
 
