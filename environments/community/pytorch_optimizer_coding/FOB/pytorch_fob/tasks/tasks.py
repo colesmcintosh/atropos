@@ -7,11 +7,12 @@ import torch
 from lightning import LightningDataModule, LightningModule
 from lightning.pytorch.core.optimizer import LightningOptimizer
 from lightning.pytorch.utilities.types import OptimizerLRScheduler
+from torch import nn
+from torch.utils.data import DataLoader
+
 from pytorch_fob.engine.configs import TaskConfig
 from pytorch_fob.engine.parameter_groups import GroupedModel
 from pytorch_fob.optimizers import Optimizer
-from torch import nn
-from torch.utils.data import DataLoader
 
 
 def import_task(name: str):
@@ -85,7 +86,7 @@ class TaskDataModule(LightningDataModule):
         if not self.batch_size or self.batch_size < 1:
             raise NotImplementedError(
                 "Each task configures its own batch_size. \
-                                      Please set it explicitely, to avoid confusion."
+                                      Please set it explicitly, to avoid confusion."
             )
 
     def train_dataloader(self):
