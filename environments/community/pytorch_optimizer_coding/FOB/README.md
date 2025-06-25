@@ -102,7 +102,7 @@ This runs all tasks with all optimizers and hyperparameter specified inside `exp
 You can either supply one value or a list of values for each entry. Grid-search combines each possible combination.
 For example: you specified 3 task, 2 optimizer, 2 different learning rates and 4 seeds then you need a total 3 x 2 x 2 x 4 = 48 runs
 
-You can additionally set values trough the command line (this overrides existing values). For example you can set the `data_dir` where datasets are stored using either:
+You can additionally set values through the command line (this overrides existing values). For example you can set the `data_dir` where datasets are stored using either:
 ```bash
 python -m script experiment.yaml "engine.data_dir=<path>"
 ```
@@ -257,7 +257,7 @@ Take a look at the [output directory](examples/usage/outputs/experiment-4/) to s
 
 ### Example 5: Running experiments with SLURM (convenience)
 
-You can run experiments with SLURM. This is a convenience feature that allows you to run experiments on remote clusters. It splits each run of the experiment into a seperate job.
+You can run experiments with SLURM. This is a convenience feature that allows you to run experiments on remote clusters. It splits each run of the experiment into a separate job.
 
 ```yaml
 engine:
@@ -268,7 +268,7 @@ engine:
 ```
 
 - The `slurm_array` scheduler will put the runs into an array job. Therefore all slurm relevant parameters (e.g. devices, time, workers, ...) need to be equal across all runs. Using this scheduler is only recommended when running a single task.
-The `slurm_jobs` scheduler on the other hand will put each run into a seperate job.
+The `slurm_jobs` scheduler on the other hand will put each run into a separate job.
 - arguments put in `sbatch_args` will be passed to sbatch.
   e.g. `partition: my_gpu_partition` is parsed to `--partition=my_gpu_partition`
 
